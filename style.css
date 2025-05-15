@@ -1,0 +1,72 @@
+<style>
+  body {
+    background-color: black;
+    color: #00ff00;
+    font-family: 'Courier New', Courier, monospace;
+    padding: 15px;
+    margin: 0;
+    font-size: 1.1rem;
+    line-height: 1.4;
+    overflow-x: hidden;
+  }
+
+  #output {
+    white-space: pre-wrap;
+    margin-bottom: 20px;
+    overflow-wrap: break-word;
+    word-break: break-word;
+    max-width: 100%;
+  }
+
+  input {
+    background-color: black;
+    color: #00ff00;
+    border: none;
+    border-bottom: 1px solid #00ff00;
+    font-family: inherit;
+    font-size: 1.1rem;
+    width: 100%;
+    padding: 10px 5px;
+    box-sizing: border-box;
+  }
+
+  input:focus {
+    outline: none;
+  }
+
+  .btn-container {
+    margin-top: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: space-between;
+  }
+
+  button {
+    background-color: black;
+    color: #00ff00;
+    border: 1px solid #00ff00;
+    font-family: inherit;
+    font-size: 1.1rem;
+    padding: 8px 16px;
+    cursor: pointer;
+    flex: 1 0 30%;
+    min-width: 30%;
+  }
+
+  button:hover {
+    background-color: #003300;
+  }
+
+  @media (max-width: 600px) {
+    button {
+      font-size: 1rem;
+      padding: 10px;
+      flex: 1 0 45%;
+    }
+
+    input {
+      font-size: 1rem;
+    }
+  }
+</style>
