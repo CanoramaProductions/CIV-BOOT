@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>CIV:BOOT</title>
+  <style>
+    body {
+      background-color: black;
+      color: #00ff00;
+      font-family: 'Courier New', Courier, monospace;
+      padding: 20px;
+    }
+    #output {
+      white-space: pre-wrap;
+      margin-bottom: 20px;
+    }
+    input {
+      background-color: black;
+      color: #00ff00;
+      border: none;
+      border-bottom: 1px solid #00ff00;
+      font-family: inherit;
+      font-size: 16px;
+      width: 100%;
+    }
+  </style>
+</head>
+<body>
+  <div id="output">CIV:BOOT v1.0\nBoot sequence initiated...\nLoading civilization core...\n\nEnter your civilization name:</div>
+  <input id="input" type="text" autofocus />
+
+  <script>
+    const output = document.getElementById("output");
+    const input = document.getElementById("input");
+
+    let state = "start";
+    let civName = "";
+    let year = 1;
+    let population = 50;
+    let food = 100;
+    let resources = 100;
+    let location = "";
+
+    function displayStats() {
+      output.innerText += `\n--- YEAR ${year} REPORT ---\nPopulation: ${population}\nFood: ${food}\nResources: ${resources}\n`;
+    }
+
+    function randomEvent() {
+      const events = [
+        { text: "A good harvest boosts your food supply.", food: +30 },
+        { text: "Bandits raided your village. You lost resources.", resources: -20 },
+        { text: "A plague reduced your population.", population: -10 },
+        { text: "You discovered a new iron deposit!", resources: +25 },
+        { text: "A peaceful year passes.", food: 0, population: 0, resources: 0 }
+      ];
+      return events[Math.floor(Math.random() * events.length)];
+    }
+
+    function nextYear() {
+      year++;
+      food -= population; // consumption
+      if (food < 0) {
+        population += Math.floor(food / 10); // starvation
+        food = 0;
+      }
+      const event = randomEvent();
+      population += event.population || 0;
+      food += event.food || 0;
+      resources += event.resources || 0;
+      output.innerText += `\n\n>>> YEAR ${year} <<<\nEvent: ${event.text}`;
+      displayStats();
+      output.innerText += "\nChoose action: [farm / mine / train]";
+      state = "yearChoice";
+    }
+
+    input.addEventListener("keydown", function (e) {
+      if (e.key === "Enter") {
+        const value = input.value.trim().toLowerCase();
+        input.value = "";
+
+        if (state === "start") {
+          civName = value;
+          output.innerText += `\n> ${value}\nWelcome, leader of ${civName}.\nChoose your starting location: [plains / mountains / coast]`;
+          state = "chooseLocation";
+
+        } else if (state === "chooseLocation") {
+          if (["plains", "mountains", "coast"].includes(value)) {
+            location = value;
+            output.innerText += `\n> ${value}\n${civName} settles near the ${value}.\nYear 1 begins...`;
+            displayStats();
+            output.innerText += "\nChoose action: [farm / mine / train]";
+            state = "yearChoice";
+          } else {
+            output.innerText += `\n> ${value}\nInvalid location. Choose: plains, mountains, or coast.`;
+          }
+
+        } else if (state === "yearChoice") {
+          if (value === "farm") {
+            food += 30;
+            output.innerText += `\n> ${value}\nYour people plant crops. (+30 food)`;
+            nextYear();
+          } else if (value === "mine") {
+            resources += 30;
+            output.innerText += `\n> ${value}\nYou mine nearby hills. (+30 resources)`;
+            nextYear();
+          } else if (value === "train") {
+            resources -= 10;
+            output.innerText += `\n> ${value}\nYou train a small militia. (-10 resources)`;
+            nextYear();
+          } else {
+            output.innerText += `\n> ${value}\nInvalid action. Choose: farm, mine, or train.`;
+          }
+        }
+      }
+    });
+  </script>
+</body>
+</html>
