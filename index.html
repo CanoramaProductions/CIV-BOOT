@@ -2,32 +2,45 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
   <title>CIV:BOOT</title>
   <style>
     body {
       background-color: black;
       color: #00ff00;
       font-family: 'Courier New', Courier, monospace;
-      padding: 20px;
+      padding: 15px;
+      margin: 0;
+      font-size: 1.1rem;
+      line-height: 1.4;
     }
+
     #output {
       white-space: pre-wrap;
       margin-bottom: 20px;
+      overflow-wrap: break-word;
     }
+
     input {
       background-color: black;
       color: #00ff00;
       border: none;
       border-bottom: 1px solid #00ff00;
       font-family: inherit;
-      font-size: 16px;
+      font-size: 1.1rem;
       width: 100%;
+      padding: 10px 5px;
+      box-sizing: border-box;
+    }
+
+    input:focus {
+      outline: none;
     }
   </style>
 </head>
 <body>
   <div id="output">CIV:BOOT v1.0\nBoot sequence initiated...\nLoading civilization core...\n\nEnter your civilization name:</div>
-  <input id="input" type="text" autofocus />
+  <input id="input" type="text" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
 
   <script>
     const output = document.getElementById("output");
@@ -58,9 +71,9 @@
 
     function nextYear() {
       year++;
-      food -= population; // consumption
+      food -= population;
       if (food < 0) {
-        population += Math.floor(food / 10); // starvation
+        population += Math.floor(food / 10);
         food = 0;
       }
       const event = randomEvent();
@@ -71,6 +84,13 @@
       displayStats();
       output.innerText += "\nChoose action: [farm / mine / train]";
       state = "yearChoice";
+      scrollToBottom();
+    }
+
+    function scrollToBottom() {
+      setTimeout(() => {
+        window.scrollTo(0, document.body.scrollHeight);
+      }, 50);
     }
 
     input.addEventListener("keydown", function (e) {
@@ -111,6 +131,7 @@
             output.innerText += `\n> ${value}\nInvalid action. Choose: farm, mine, or train.`;
           }
         }
+        scrollToBottom();
       }
     });
   </script>
